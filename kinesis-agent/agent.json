@@ -1,0 +1,11 @@
+{
+    "checkpointFile": "/tmp/choose-share/checkpoint.log",
+    "kinesis.endpoint": "http://localhost:4567",
+    "flows": [
+      {
+        "filePattern": "/tmp/choose-share/audit-kinesis-agent.log*",
+        "kinesisStream": "local-qi-audit-audit-stream",
+        "maxBufferAgeMillis": 3000
+      }
+    ]
+  }

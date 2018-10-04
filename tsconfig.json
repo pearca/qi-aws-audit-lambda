@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": [
+      "esnext",
+      "es5",
+      "es6",
+      "dom",
+      "es2015",
+      "esnext.asynciterable"
+    ],
+    "target": "es2015",
+    "strict": true,
+    "outDir": "./lib",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "inlineSourceMap": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@audit/*": ["src/*"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "__tests__/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib/**/*"
+  ]
+}

@@ -1,0 +1,139 @@
+
+
+service: qi-audit
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: us-east-2
+  environment: ${file(./src/config/env.yml):${opt:stage, self:custom.defaults.stage}}
+  iamRoleStatements:
+  - Effect: Allow
+    Action:
+      #- firehose:DeleteDeliveryStream
+      #- firehose:PutRecord
+      #- firehose:PutRecordBatch
+      - kinesis:PutRecord
+      - kinesis:PutRecordBatch
+      #- firehose:UpdateDestination
+    Resource: '*'
+
+custom:
+  names:
+    bucket:
+      #firehose: ${opt:stage}-${self:service}-firehose
+    kinesis:
+      assess: ${opt:stage}-${self:service}-assess-log-stream
+      audit: ${opt:stage}-${self:service}-audit-stream
+    #firehose: ${opt:stage}-${self:service}-firehose-stream
+  defaults:
+    stage: dev
+  webpack:
+    includeModules: true # enable auto-packing of external modules
+  # localstack:
+  #   host: http://localhost
+  #   stages:
+  #     - local
+  #     #- dev
+  #   debug: true
+  #   #endpoints:
+  #    # S3: http://localhost:4572
+  #     #CloudFormation: http://localhost:4581
+  #     #Elasticsearch: http://localhost:9200
+  #     #Lambda: http://localhost:4574
+  #     #Kinesis: http://localhost:4567
+    
+functions:
+  assessStream:
+    handler: src/handlers/assess-stream.handle
+    events:
+      - stream:
+          type: kinesis
+          arn: 
+            Fn::GetAtt: 
+              - AssessKinesisStream
+              - Arn
+          batchSize: 500
+          startingPosition: LATEST
+  auditStream:
+    handler: src/handlers/audit-stream.handle
+    events:
+      - stream:
+          type: kinesis
+          arn: 
+            Fn::GetAtt: 
+              - AuditKinesisStream
+              - Arn
+          batchSize: 500
+          startingPosition: LATEST
+package:
+  include:
+    - src/**/*
+  
+plugins:
+ - serverless-webpack
+ - serverless-offline
+ #- serverless-domain-manager
+ #- serverless-localstack
+
+resources:
+  Resources:
+      AssessKinesisStream:
+        Type: AWS::Kinesis::Stream
+        DeletionPolicy: Delete
+        Properties:
+          Name: ${self:custom.names.kinesis.assess}
+          ShardCount: 1
+      AuditKinesisStream:
+        Type: AWS::Kinesis::Stream
+        DeletionPolicy: Delete
+        Properties:
+          Name: ${self:custom.names.kinesis.audit}
+          ShardCount: 1
+      # FirehoseToS3Role:
+      #   Type: AWS::IAM::Role
+      #   DeletionPolicy: Delete
+      #   Properties:
+      #     RoleName: FirehoseToS3Role
+      #     AssumeRolePolicyDocument:
+      #       Statement:
+      #       - Effect: Allow
+      #         Principal:
+      #           Service:
+      #           - firehose.amazonaws.com
+      #         Action:
+      #         - sts:AssumeRole
+      #     Policies:
+      #     - PolicyName: FirehoseToS3Policy
+      #       PolicyDocument:
+      #         Statement:
+      #           - Effect: Allow
+      #             Action:
+      #             - s3:AbortMultipartUpload
+      #             - s3:GetBucketLocation
+      #             - s3:GetObject
+      #             - s3:ListBucket
+      #             - s3:ListBucketMultipartUploads
+      #             - s3:PutObject
+      #             Resource: '*'
+      # ServerlessKinesisFirehoseBucket:
+      #   Type: AWS::S3::Bucket
+      #   DeletionPolicy: Retain
+      #   Properties:
+      #     BucketName:  ${self:custom.names.bucket.firehose}  
+      # ServerlessKinesisFirehose:
+      #   Type: AWS::KinesisFirehose::DeliveryStream
+      #   Properties:
+      #     DeliveryStreamName: ${self:custom.names.firehose}
+      #     S3DestinationConfiguration:
+      #       BucketARN:
+      #         Fn::Join:
+      #         - ''
+      #         - - 'arn:aws:s3:::'
+      #           - Ref: ServerlessKinesisFirehoseBucket
+      #       BufferingHints:
+      #         IntervalInSeconds: "60"
+      #         SizeInMBs: "1"
+      #       CompressionFormat: "UNCOMPRESSED"
+      #       Prefix: "raw/"
+      #       RoleARN: { Fn::GetAtt: [ FirehoseToS3Role, Arn ] }

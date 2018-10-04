@@ -1,0 +1,8 @@
+---
+oldtest:
+ PROP1: first
+ PROP2: 100
+newtest:
+ PROP1: second
+ PROP2: 200
+ 

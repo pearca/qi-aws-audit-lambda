@@ -1,0 +1,96 @@
+{
+  "name": "qi-aws-audit-lambda",
+  "version": "0.0.0",
+  "description": "qi-aws-audit-lambda",
+  "license": "MIT",
+  "repository": "",
+  "author": {
+    "name": "PSN",
+    "email": "",
+    "url": ""
+  },
+  "keywords": [
+    ""
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib && rimraf coverage",
+    "format": "prettier --write \"{src,__tests__}/**/*.ts\" --single-quote --trailing-comma es5",
+    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
+    "prepublishOnly": "npm run build",
+    "prebuild": "npm i && npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
+    "build": "tsc --pretty",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "watch": "npm run build -- --watch",
+    "watch:test": "jest --watch",
+    "kinesis": "kinesalite",
+    "kinesis_agent": "ts-node -r tsconfig-paths/register --project tsconfig.json src/offline/launch-kinesis-agent.ts",
+    "createOfflineStream": "ts-node -r tsconfig-paths/register --project tsconfig.json src/offline/start-kinesis-stream.ts",
+    "runOfflineStream": "ts-node -r tsconfig-paths/register --project tsconfig.json src/offline/run-kinesis-lambda-handler.ts",
+    "kibana": "ts-node -r tsconfig-paths/register --project tsconfig.json src/offline/launch-kibana.ts",
+    "kibanaUi": "ts-node -r tsconfig-paths/register --project tsconfig.json src/offline/launch-kibana-ui.ts",
+    "offline": "concurrently --names \"ELASTICSEARCH,KIBANA,KINESIS,CREATE_AUDIT,LISTEN_HTTP,LISTEN_AUDIT_STRM,KIBANAUI,KINESIS_AGENT\" -c \"bgYellow,bgRed,bgGreen.bold,bgGreen.bold,bgBlue.bold,bgMagenta.bold,bgWhite,bgGreen\" --kill-others-on-fail \"elasticsearch\" \"npm run kibana\"  \"kinesalite\" \"npm run createOfflineStream\" \"serverless offline start --stage local\" \"npm run runOfflineStream\" \"npm run kibanaUi\" \"npm run kinesis_agent\"",
+    "pretest": "npm i && npm run clean",
+    "preoffline": "npm i",
+    "deploy": "SLS_DEBUG=* serverless deploy --stage dev",
+    "deploy:prod": "SLS_DEBUG=* serverless deploy --stage prod",
+    "remove": "SLS_DEBUG=* serverless remove --stage dev",
+    "remove:prod": "SLS_DEBUG=* serverless remove --stage prod",
+    "predeploy": "npm i"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.13",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/elasticsearch": "^5.0.26",
+    "@types/jest": "^22.0.1",
+    "@types/js-yaml": "^3.11.2",
+    "@types/node": "^8.0.0",
+    "@types/tail": "^1.2.0",
+    "aws-sdk": "^2.323.0",
+    "chrome-launcher": "^0.10.5",
+    "concurrently": "^4.0.1",
+    "coveralls": "^2.0.0",
+    "elasticsearch": "^15.1.1",
+    "jest": "^22.0.4",
+    "js-yaml": "^3.12.0",
+    "kinesalite": "^1.14.0",
+    "prettier": "^1.5.2",
+    "rimraf": "^2.0.0",
+    "serverless": "^1.32.0",
+    "serverless-domain-manager": "^2.6.5",
+    "serverless-offline": "^3.25.14",
+    "serverless-webpack": "^5.2.0",
+    "tail": "^2.0.0",
+    "ts-jest": "^22.0.1",
+    "ts-loader": "^5.2.1",
+    "ts-node": "^3.3.0",
+    "tsconfig-paths": "^3.6.0",
+    "tslint": "^5.0.0",
+    "tslint-config-prettier": "^1.1.0",
+    "typescript": "^2.9.2",
+    "webpack": "^4.20.2"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "jest": {
+    "transform": {
+      ".(ts)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "^@audit/(.*)": "<rootDir>/src/$1"
+    },
+    "testEnvironment": "node"
+  }
+}
