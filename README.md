@@ -1,5 +1,5 @@
 
-# Audit log processing with AWS Serverless with Kinesis streams
+# Audit log processing with AWS Serverless and Kinesis streams
 
 ## Design
 
