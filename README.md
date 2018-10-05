@@ -3,7 +3,7 @@
 
 ## Design
 
-![Architecture](doc/arch.svg "Architecture")
+![Architecture](doc/arch.jpg "Architecture")
 
 
 ### Assess
