@@ -122,7 +122,7 @@ groovy:000> f << {"type":"assess","partitionKey":"en-au","payload":{"events":[{"
 ## AWS Deployment
 
 ### Pre-requisites
-An Elasticsearch and Kibana UI needs to be setup preferable with proper access privileges and domain names, for eg http://kibana.<qiactive/qidevteam>.com etc. 
+An Elasticsearch and Kibana UI needs to be setup preferable with proper access privileges and domain names, for eg http://kibana.*qiactive/qidevteam*.com etc. 
 
 (Note this can be part of the serverless deployment so that this automatically created as part of stack creation process). This only needs to be added to the `resources` section of the `serverless.yml`
 
@@ -136,8 +136,8 @@ Obtain the aws credentials, the access and secret key
 `npm run deploy:prod` deploys to AWS with **prod** stage
 
 These commands at the moment, creates:
-- Generic Audit Kinesis Stream with the name <stage>-qi-audit-audit-stream, for eg prod it will be `prod-qi-audit-audit-stream`
-- Assess Audit Kinesis Stream with the name <stage>-qi-audit-assess-log-stream.
+- Generic Audit Kinesis Stream with the name *stage*-qi-audit-audit-stream, for eg prod it will be `prod-qi-audit-audit-stream`
+- Assess Audit Kinesis Stream with the name *stage*-qi-audit-assess-log-stream.
 - Uploads the  Generic stream λ handler function. See `audit-stream.ts`.
 - Uploads the Assess stream λ handler function. See `assess-stream.ts`.
 
@@ -148,7 +148,14 @@ This is when we need to update any logic in our processing source ( Lambda ). If
 - `npm run remove` or `npm run remove:prod` for dev or prod
 - `npm run deploy` or `npm run deploy:prod` for dev or prod
 
+### Testing
+To test the kinesis stream uploading to elasticsearch run
+`npm run kinesis_agent_aws` and add a json line at the tail of `/tmp/choose-share/audit-kinesis-agent.log` as mentioned under **Test Publish to Kinesis**.
 
+- The agent uses us-east-2 kinesis stream @ kinesis.us-east-2.amazonaws.com
+
+**Note** , the agent based on aws relies on having the aws creds configured as mentioned in the *Setup*.  It is also possible to override the access and secret key if passed in as env variables as shown here;-
+`aws_access_key_id=somekey aws_secret_access_key=xxxx npm run kinesis_agent_aws`
 
 ## Setting travis and coveralls badges
 1. Sign in to [travis](https://travis-ci.org/) and activate the build for your project.
@@ -159,4 +166,5 @@ This is when we need to update any logic in our processing source ( Lambda ). If
 ## References 
  - Project created using [Yeoman TypeScript NodeJS Generator](https://github.com/ospatil/generator-node-typescript#readme)
  - Offline Kinesis inspired from http://blogs.lessthandot.com/index.php/enterprisedev/cloud/serverless-http-kinesis-lambdas-with-offline-development/
-- Diagram prepped from [AWS Draw IO](https://www.draw.io/?splash=0&libs=aws3). Import the [audit log DrawIO XML](doc/arch.draw.io.xml) into the webapp.
+ - Diagram prepped from [AWS Draw IO](https://www.draw.io/?splash=0&libs=aws3). Import the [audit log DrawIO XML](doc/arch.draw.io.xml) into the webapp.
+ - [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html)

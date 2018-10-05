@@ -2,8 +2,8 @@ import { Kinesis, Request, AWSError } from 'aws-sdk';
 
 
 import { runner } from './kinesis';
-import clientConfig  from  '@audit/utils/kinesis-client';
-
+import { getClientConfig }  from  '@audit/utils/kinesis-client';
+import { yaml2env } from '@audit/utils/yaml-reader';
 
 /**
  * This is to bind the kinesis stream locally to a local lambda. Here we fake the real 
@@ -12,7 +12,10 @@ import clientConfig  from  '@audit/utils/kinesis-client';
  * This is strictly for OFFLINE mode.
  */
 
-const kinesis: Kinesis = new Kinesis(clientConfig);
+
+// load all offline env properties
+yaml2env('./src/config/env.yml', 'local');
+const kinesis: Kinesis = new Kinesis(getClientConfig());
 
 const functions = [
     { funName: 'EventProcessor', handlerPath: '../handlers/audit-stream', handlerName: 'handle', kinesisStreamName: process.env.KINESIS_STREAM_NAME_AUDIT_LOG },

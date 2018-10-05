@@ -69,6 +69,7 @@ functions:
 package:
   include:
     - src/**/*
+    - src/config/env.yml
   
 plugins:
  - serverless-webpack

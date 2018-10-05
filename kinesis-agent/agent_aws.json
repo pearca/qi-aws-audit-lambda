@@ -1,0 +1,11 @@
+{
+    "checkpointFile": "/tmp/choose-share/checkpoint.log",
+    "kinesis.endpoint": "https://kinesis.us-east-2.amazonaws.com",
+    "flows": [
+      {
+        "filePattern": "/tmp/choose-share/audit-kinesis-agent.log*",
+        "kinesisStream": "dev-qi-audit-audit-stream",
+        "maxBufferAgeMillis": 3000
+      }
+    ]
+  }
