@@ -5,7 +5,6 @@
 
 ![Architecture](doc/arch.svg "Architecture")
 
-- Diagram prepped from [AWS Draw IO](https://www.draw.io/?splash=0&libs=aws3). Import the [audit log DrawIO XML](doc/arch.draw.io.xml) into the webapp.
 
 ### Assess
 Assess sends the audit events collected over time , offline or online , over to Central through a sync process.
@@ -160,3 +159,4 @@ This is when we need to update any logic in our processing source ( Lambda ). If
 ## References 
  - Project created using [Yeoman TypeScript NodeJS Generator](https://github.com/ospatil/generator-node-typescript#readme)
  - Offline Kinesis inspired from http://blogs.lessthandot.com/index.php/enterprisedev/cloud/serverless-http-kinesis-lambdas-with-offline-development/
+- Diagram prepped from [AWS Draw IO](https://www.draw.io/?splash=0&libs=aws3). Import the [audit log DrawIO XML](doc/arch.draw.io.xml) into the webapp.
