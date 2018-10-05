@@ -1,10 +1,10 @@
 import { Handler, Callback } from 'aws-lambda';
 import { AuditEvent } from '@audit/models/event';
 
-import clientConfig from  '@audit/utils/kinesis-client';
+import { getClientConfig } from  '@audit/utils/kinesis-client';
 import { Kinesis } from 'aws-sdk';
 
-const kinesis: Kinesis = new Kinesis(clientConfig);
+const kinesis: Kinesis = new Kinesis(getClientConfig());
 
 const streams: any = 
     {
@@ -42,7 +42,7 @@ export const handle: Handler = (event: any, context: any, callback: Callback) =>
                         console.error("Error", err);
                         callback(err, { statusCode: 500, body: "Error writing to kinesis" } );
                     } else { 
-                        console.log("Return success from http after putting kinesis");
+                        console.log("Return success after putting kinesis");
                         callback(null, { statusCode: 200, body: JSON.stringify({status: "Success"})} );
                     }
                 });
@@ -50,8 +50,8 @@ export const handle: Handler = (event: any, context: any, callback: Callback) =>
 
             console.log(`Audit processed`, eventPayload);
         } catch(e) {
-            console.warn(`Error in payload json parse`, e);
-            callback(null, `Error processing ${event.Records.length} event. ${e}`);
+            console.error(`Error in payload json parse`, e);
+            callback(e, `Error processing ${event.Records.length} event. ${e}`);
         }
        
     });

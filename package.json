@@ -29,6 +29,7 @@
     "watch": "npm run build -- --watch",
     "watch:test": "jest --watch",
     "kinesis": "kinesalite",
+    "kinesis_agent_aws": "java -jar ./kinesis-agent/uber-amazon-kinesis-agent-1.1.jar -c ./kinesis-agent/agent_aws.json -l ./kinesis-agent.log -L TRACE",
     "kinesis_agent": "ts-node -r tsconfig-paths/register --project tsconfig.json src/offline/launch-kinesis-agent.ts",
     "createOfflineStream": "ts-node -r tsconfig-paths/register --project tsconfig.json src/offline/start-kinesis-stream.ts",
     "runOfflineStream": "ts-node -r tsconfig-paths/register --project tsconfig.json src/offline/run-kinesis-lambda-handler.ts",
@@ -41,7 +42,8 @@
     "deploy:prod": "SLS_DEBUG=* serverless deploy --stage prod",
     "remove": "SLS_DEBUG=* serverless remove --stage dev",
     "remove:prod": "SLS_DEBUG=* serverless remove --stage prod",
-    "predeploy": "npm i"
+    "predeploy": "npm i",
+    "prekinesis_agent_aws": "npm i"
   },
   "dependencies": {},
   "devDependencies": {
