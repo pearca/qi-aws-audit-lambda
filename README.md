@@ -16,6 +16,8 @@ Assess sends the audit events collected over time , offline or online , over to 
 - The specific stream processes the payload and sends it over to AWS Elasticsearch under an Index
 - Kibana is used to interrogate into these indices for events
 
+### Qiactive 
+- An example branch is in [assess-audit-logger-log-file](https://github.com/pearca/qiactive/compare/assess-audit-logger-log-file?expand=1)
 
 
 ## Local Setup
