@@ -34,5 +34,9 @@ const createStream = (streamName: String) => {
     });
 };
 
-[process.env.KINESIS_STREAM_NAME_ASSESS_LOG, process.env.KINESIS_STREAM_NAME_AUDIT_LOG].forEach(streamName => createStream(streamName as string));
+[
+    process.env.KINESIS_STREAM_NAME_AUDIT_LOG, 
+    process.env.KINESIS_STREAM_NAME_ASSESS_LOG, 
+    process.env.KINESIS_STREAM_NAME_CENTRAL_READ_LOG
+].forEach(streamName => createStream(streamName as string));
 

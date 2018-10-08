@@ -18,6 +18,7 @@ custom:
   names:
     kinesis:
       assess: ${opt:stage}-${self:service}-assess-log-stream
+      central_read: ${opt:stage}-${self:service}-central-read-log-stream
       audit: ${opt:stage}-${self:service}-audit-stream
     
   defaults:
@@ -34,6 +35,17 @@ functions:
           arn: 
             Fn::GetAtt: 
               - AssessKinesisStream
+              - Arn
+          batchSize: 500
+          startingPosition: LATEST
+  centralReadStream:
+    handler: src/handlers/central-readlog-stream.handle
+    events:
+      - stream:
+          type: kinesis
+          arn: 
+            Fn::GetAtt: 
+              - CentralReadKinesisStream
               - Arn
           batchSize: 500
           startingPosition: LATEST
@@ -64,6 +76,12 @@ resources:
         DeletionPolicy: Delete
         Properties:
           Name: ${self:custom.names.kinesis.assess}
+          ShardCount: 1
+      CentralReadKinesisStream:
+        Type: AWS::Kinesis::Stream
+        DeletionPolicy: Delete
+        Properties:
+          Name: ${self:custom.names.kinesis.central_read}
           ShardCount: 1
       AuditKinesisStream:
         Type: AWS::Kinesis::Stream

@@ -8,7 +8,8 @@ const kinesis: Kinesis = new Kinesis(getClientConfig());
 
 const streams: any = 
     {
-        "assess": process.env.KINESIS_STREAM_NAME_ASSESS_LOG as string
+        "assess": process.env.KINESIS_STREAM_NAME_ASSESS_LOG as string,
+        "central_read_log": process.env.KINESIS_STREAM_NAME_CENTRAL_READ_LOG as string
     };
 
 /**

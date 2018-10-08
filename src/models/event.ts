@@ -23,3 +23,13 @@ export interface AssessAuditEvent {
     offline: boolean;
     changes?: FieldChange[];
 }
+
+export interface CentralReadEvent {
+   userId: string;
+   username: string;
+   userBusinessEntity: string;
+   userBusinessUnit: string;
+   eventDate: string;
+   readEntity: string;
+   readEntityId: string;   
+}

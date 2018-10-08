@@ -1,5 +1,5 @@
 import { Client } from "elasticsearch";
-import { AssessAuditEvent, AuditEvent } from "@audit/models/event";
+import { AssessAuditEvent, AuditEvent, CentralReadEvent } from "@audit/models/event";
 
 export class ESClient {
 
@@ -14,7 +14,6 @@ export class ESClient {
     }
 
     public processAssessLogs(logs: AssessAuditEvent[]): void {
-
         const mapping = `
                     {
                         "${this.type}": {
@@ -30,7 +29,25 @@ export class ESClient {
         this.createIndex(JSON.parse(mapping), () => {
             logs.forEach(l => this.addIndex(l));
         });
+    }
 
+
+    public processCentralReadLogs(logs: CentralReadEvent[]): void {
+        const mapping = `
+                    {
+                        "${this.type}": {
+                            "properties": {
+                                "eventDate": {
+                                    "type":   "date",
+                                    "format": "yyyyMMdd'T'HHmmssZ"
+                                }
+                            }
+                        }
+                    }
+                `;
+        this.createIndex(JSON.parse(mapping), () => {
+            logs.forEach(l => this.addIndex(l));
+        });
     }
 
     private createIndex(mappings: any, callback: () => void): void {

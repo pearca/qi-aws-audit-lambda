@@ -59,7 +59,7 @@ This:
 ### Test Publish to Kinesis
 
 The kinesis agent in here tails `/tmp/choose-share/audit-kinesis-agent.log`. So if you pipe in the following json into a new line at the end, the agent picks it up and sends it to the generic Kinesis stream as configured in the **agent.json**. Note that the json should be a single line.
-
+- For assess
 ```json
 {
     "type": "assess",
@@ -106,6 +106,23 @@ The kinesis agent in here tails `/tmp/choose-share/audit-kinesis-agent.log`. So 
 }
 ```
 
+- For Central read logs
+```json
+{
+  "type": "central_read_log",
+  "partitionKey": "Patient",
+  "payload": {
+    "userId": "77BB6D4296FB1A57E050007F010023EC",
+    "username": "Jane",
+    "userBusinessEntity": "My New Entity",
+    "userBusinessUnit": "Pearson US",
+    "eventDate": "20181008T165728+0000",
+    "readEntity": "Patient",
+    "readEntityId": "77BB6D42C51D1A57E050007F010023EC"
+  }
+}
+```
+
 Typically I use the `groovysh` way as follows:-
 
 ```sh
@@ -138,8 +155,10 @@ Obtain the aws credentials, the access and secret key
 These commands at the moment, creates:
 - Generic Audit Kinesis Stream with the name *stage*-qi-audit-audit-stream, for eg prod it will be `prod-qi-audit-audit-stream`
 - Assess Audit Kinesis Stream with the name *stage*-qi-audit-assess-log-stream.
-- Uploads the  Generic stream λ handler function. See `audit-stream.ts`.
-- Uploads the Assess stream λ handler function. See `assess-stream.ts`.
+- Central read log Audit Kinesis Stream with the name *stage*-qi-audit-central-read-log-stream.
+- Uploads the  Generic stream λ handler function. See [audit-stream.ts](src/handlers/audit-stream.ts).
+- Uploads the Assess stream λ handler function. See [assess-stream.ts](src/handlers/assess-stream.ts).
+- Upload the Central Read log stream λ handler function. See [central-readlog-stream.ts](src/handlers/central-readlog-stream.ts).
 
 The λ functions that get uploaded are the TS transpiled JS with all the dependencies using imports and other configs in `webpack.config.js`
 

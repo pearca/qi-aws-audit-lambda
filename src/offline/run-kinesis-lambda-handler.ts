@@ -19,7 +19,8 @@ const kinesis: Kinesis = new Kinesis(getClientConfig());
 
 const functions = [
     { funName: 'EventProcessor', handlerPath: '../handlers/audit-stream', handlerName: 'handle', kinesisStreamName: process.env.KINESIS_STREAM_NAME_AUDIT_LOG },
-    { funName: 'EventProcessor', handlerPath: '../handlers/assess-stream', handlerName: 'handle', kinesisStreamName: process.env.KINESIS_STREAM_NAME_ASSESS_LOG }
+    { funName: 'EventProcessor', handlerPath: '../handlers/assess-stream', handlerName: 'handle', kinesisStreamName: process.env.KINESIS_STREAM_NAME_ASSESS_LOG },
+    { funName: 'EventProcessor', handlerPath: '../handlers/central-readlog-stream', handlerName: 'handle', kinesisStreamName: process.env.KINESIS_STREAM_NAME_CENTRAL_READ_LOG }
 ];
 
 
