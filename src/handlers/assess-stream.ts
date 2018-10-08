@@ -52,7 +52,7 @@ let esClient: ESClient;
  */
 export const handle: Handler = (event: any, context: any, callback: Callback) => {
     if(!esClient) {
-        esClient = new ESClient('audit', 'assess');
+        esClient = new ESClient('assess', 'audit');
     }
     event.Records.forEach((record: any) => {
         const payload = new Buffer(record.kinesis.data, 'base64').toString('utf-8');
