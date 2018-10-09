@@ -187,5 +187,5 @@ To test the kinesis stream uploading to elasticsearch run
 ## References 
  - Project created using [Yeoman TypeScript NodeJS Generator](https://github.com/ospatil/generator-node-typescript#readme)
  - Offline Kinesis inspired from http://blogs.lessthandot.com/index.php/enterprisedev/cloud/serverless-http-kinesis-lambdas-with-offline-development/
- - Diagram prepped from [AWS Draw IO](https://www.draw.io/?splash=0&libs=aws3). Import the [audit log DrawIO XML](doc/arch.draw.io.xml) into the webapp.
+ - Diagram prepped from [AWS Draw IO](https://www.draw.io/?splash=0&libs=aws3). Import the [audit log DrawIO XML](doc/arch.draw.io.xml) into the webapp or edit it [here](https://www.draw.io/?splash=0&libs=aws3#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fpearca%2Fqi-aws-audit-lambda%2Fmaster%2Fdoc%2Farch.draw.io.xml%3Ftoken%3DAEZIUU4ccq0eVMZjZvxqAGy-0WBgiG4mks5bxljowA%253D%253D).
  - [AWS Regions and Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html)
