@@ -44,6 +44,55 @@ kibana
 Open a browser and go to http://localhost:5601 to explore the UI. 
 Kill the kibana server as this will be started using npm.
 
+### Kinesis Agent
+For ease of starting the kinesis agent an 'uber' kinesis jar is provided in [here](kinesis-agent/). As the name implies an uber jar is a jar which contains all the dependent jars bundled into a single jar.
+This is by cloning the [Kinesis Agent Git Repo](https://github.com/awslabs/amazon-kinesis-agent.git) and modifying the pom.xml as
+- Including xml and properties into resources
+```
+ <resources>
+        <resource>
+            <directory>src</directory>
+            <includes>                      
+                <include>**/*.xml</include>
+                 <include>**/*.properties</include>
+            </includes>
+        </resource>
+
+        .. etc
+</resources>
+```
+- Using shade mvn plugin to create the uber jar
+```
+<plugins>
+ <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-shade-plugin</artifactId>
+              <executions>
+                  <execution>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>shade</goal>
+                      </goals>
+                  </execution>
+              </executions>
+              <configuration>
+                  <finalName>uber-${artifactId}-${version}</finalName>
+                  <transformers>
+                    <!-- add Main-Class to manifest file -->
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                    <mainClass>com.amazon.kinesis.streaming.agent.Agent</mainClass>
+                  </transformer>
+                  </transformers>
+              </configuration>
+        </plugin>
+
+        .. etc
+</plugins>
+</build>
+```
+
+- Package 
+`mvn clean package`
 
 ### Offline mode
 
